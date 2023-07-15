@@ -1,0 +1,8 @@
+# dependencies
+# mesh4d (comming soon...)
+
+# jupyter notebook
+ipykernel
+nbconvert
+trame
+ipywidgets
