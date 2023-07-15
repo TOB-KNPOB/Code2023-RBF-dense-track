@@ -15,7 +15,7 @@ from mesh4d import obj3d, obj4d, field
 class Trans_Nonrigid_BCPD(field.Trans_Nonrigid):
     """Derived from :class:`mesh4d.field.Trans_Nonrigid` and replace the displacement field estimation as Bayesian Coherent Point Drift (BCPD) based approach.
     """
-    def regist(self, sample_num: int = 1000, field_nbr: int = 100, scale_rate: float = 100, **kwargs):
+    def regist(self, sample_num: int = 1000, field_nbr: int = 100, scale_rate: float = 1, **kwargs):
         """The registration method.
 
         Parameters
