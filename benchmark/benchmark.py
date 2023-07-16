@@ -10,8 +10,11 @@ sys.path.insert(0, parent_dir)
 
 import time
 import argparse
+import pyvista as pv
+import mesh4d
 from mesh4d import kps, obj3d, utils
 from mesh4d.analyse import crave, visual, measure
+
 from regist import reg_rbf, reg_ecpd, reg_cpd, reg_bcpd
 
 def sys_args_parser() -> argparse.ArgumentParser:
@@ -95,11 +98,24 @@ class Benchmarker:
         vkps_random = self.o4.assemble_markerset(name='vkps_random')
         vkps_random.interp_field()
 
-        if self.args.export:
+        # animation
+        if self.args.plot:
             self.o4.animate(output_folder=self.args.export_folder, filename='vkps_random', kps_names=('vkps_random',), m_props={'opacity': 0.5})
 
+        # stack plot
+        # p.s. this image need to be manually saved
         if self.args.plot:
             self.o4.show(elements='mk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500], zoom_rate=5, skip=round(len(self.breast_ls) / 10), m_props={'opacity': 0.5})
+
+        # trace plot
+        if self.args.plot:
+            scene = pv.Plotter()
+            vkps_random.add_to_scene(scene)
+            self.breast_ls[0].add_mesh_to_scene(scene, opacity=0.1)
+
+            export_path = os.path.join(self.args.export_folder, 'vkps_random_trace.png')
+            scene.camera_position = 'xy'
+            scene.show(screenshot=export_path)
             
     def eval_deformation_intensity(self):
         print('-' * 50)
@@ -155,35 +171,86 @@ class Bemchmarker_marker_guided(Benchmarker):
         kps_source = self.landmarks.get_time_coord(0)
         self.o4.vkps_track(kps_source, start_id=0, name='vkps_control')
         vkps_control = self.o4.assemble_markerset(name='vkps_control')
-        self.control_diff = kps.MarkerSet.diff(vkps_control, self.landmarks)
+        self.diff_control = kps.MarkerSet.diff(vkps_control, self.landmarks)
 
-        if self.args.export:
+        if self.args.plot:
             self.o4.animate(self.args.export_folder, filename='vkps_control', kps_names=('vkps_control', 'landmarks'), m_props={'opacity': 0.5})
 
     def eval_noncontrol_landmark(self):
         super().eval_noncontrol_landmark()
-        pass
+        import time
+        mesh4d.output_msg = False
+
+        self.diff_noncontrol = {}
+        self.diff_noncontrol_brief = []
+
+        for name in self.landmarks.markers.keys():
+            # split dataset
+            landmarks_test, landmarks_train = self.landmarks.split((name, ))
+
+            # registration
+            start_time = time.time()
+
+            self.o4 = self.meta['obj4d_class'](
+                fps=self.fps,
+                enable_rigid=False,
+                enable_nonrigid=True,
+            )
+            self.o4.add_obj(*self.breast_ls)
+            self.o4.load_markerset('landmarks_train', landmarks_train)
+            self.o4.load_markerset('landmarks_test', landmarks_test)
+            self.o4.regist('landmarks_train', **self.meta['regist_props'])
+
+            # computation time
+            duration = time.time() - start_time
+            print(f"computation time: {duration:.2f} (s)")
+
+            # virtual key points tracking
+            kps_source = landmarks_test.get_time_coord(0)
+            self.o4.vkps_track(kps_source, start_id=0, name='vkps')
+            
+            # quantitative estimation
+            vkps = self.o4.assemble_markerset(name='vkps')
+            diff = kps.MarkerSet.diff(vkps, landmarks_test)
+
+            # store result
+            self.diff_noncontrol[name] = diff
+            brief_str = f"{name}: test error: {diff['diff_str']}"
+            self.diff_noncontrol_brief.append(brief_str)
+            print(brief_str)
+
+        mesh4d.output_msg = True
 
         
 class Bemchmarker_marker_less(Benchmarker):
     def implement(self):
         super().implement()
+        start_time = time.time()
+    
+        self.o4 = self.meta['obj4d_class'](
+            fps=self.fps,
+            enable_rigid=False,
+            enable_nonrigid=True,
+        )
+        self.o4.add_obj(*self.breast_ls)
+        self.o4.load_markerset('landmarks', self.landmarks)
+        self.o4.regist(**self.meta['regist_props'])
+
+        self.duration = time.time() - start_time
+        print(f'4d registrtion time: {self.duration:.2f} (s)')
 
     def eval_control_landmark(self):
         super().eval_control_landmark()
-        print("N/A")
-        pass
+        print("n/a")
+        self.diff_control = None
 
     def eval_noncontrol_landmark(self):
         super().eval_noncontrol_landmark()
 
         kps_source = self.landmarks.get_time_coord(0)
-        self.o4.vkps_track(kps_source, start_id=0, name='vkps_control')
-        vkps_control = self.o4.assemble_markerset(name='vkps_control')
-        self.control_diff = kps.MarkerSet.diff(vkps_control, self.landmarks)
-
-        if self.args.export:
-            self.o4.animate(self.args.export_folder, filename='vkps_control', kps_names=('vkps_control', 'landmarks'), m_props={'opacity': 0.5})
+        self.o4.vkps_track(kps_source, start_id=0, name='vkps_noncontrol')
+        vkps_noncontrol = self.o4.assemble_markerset(name='vkps_noncontrol')
+        self.diff_noncontrol = kps.MarkerSet.diff(vkps_noncontrol, self.landmarks)
 
 
 if __name__ == "__main__":
