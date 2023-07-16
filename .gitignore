@@ -18,7 +18,8 @@ temp/
 # binary file
 *.png
 *.jpg
-*.gif
+# *.gif
+# *.mp4
 *.mov
 *.pdf
 
