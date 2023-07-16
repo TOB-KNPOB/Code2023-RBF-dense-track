@@ -2,7 +2,7 @@
 
 ## Graphical abstract
 
-![img](https://github.com/TOB-KNPOB/Code2023-RBF-dense-track/blob/main/graphic/12fps/rbf/vkps_random.gifhttps://github.com/TOB-KNPOB/Code2023-RBF-dense-track/blob/main/graphic/workflow.png)
+![img](https://github.com/TOB-KNPOB/Code2023-RBF-dense-track/blob/main/graphic/workflow.png)
 
 ## Virtual landmarks tracking
 
