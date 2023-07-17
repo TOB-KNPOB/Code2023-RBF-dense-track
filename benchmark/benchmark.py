@@ -42,6 +42,13 @@ class Benchmarker:
         self.origin_fps = 120
         self.fps = self.origin_fps / self.args.stride
 
+        print('=' * 50)
+        print(f'benchmarking {self.args.approach} on {self.fps}fps')
+
+        if not os.path.exists(self.args.export_folder):
+            os.makedirs(self.args.export_folder)
+            print(f'created export folder: {self.args.export_folder}')
+
     def load_data(self):
         """load data"""
         print('-' * 50)
@@ -99,23 +106,28 @@ class Benchmarker:
         vkps_random.interp_field()
 
         # animation
-        if self.args.plot:
+        if self.args.plot and self.args.export:
             self.o4.animate(output_folder=self.args.export_folder, filename='vkps_random', kps_names=('vkps_random',), m_props={'opacity': 0.5})
 
         # stack plot
-        # p.s. this image need to be manually saved
         if self.args.plot:
-            self.o4.show(elements='mk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500], zoom_rate=5, skip=round(len(self.breast_ls) / 10), m_props={'opacity': 0.5})
+            self.o4.show(elements='mk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500], zoom_rate=5, skip=round(len(self.breast_ls) / 10), m_props={'opacity': 0.5}, is_save=self.args.export, export_folder=self.args.export_folder, export_name='vkps_random_stack')
 
         # trace plot
         if self.args.plot:
             scene = pv.Plotter()
             vkps_random.add_to_scene(scene)
             self.breast_ls[0].add_mesh_to_scene(scene, opacity=0.1)
-
-            export_path = os.path.join(self.args.export_folder, 'vkps_random_trace.png')
             scene.camera_position = 'xy'
-            scene.show(screenshot=export_path)
+
+            if self.args.export:
+                export_path = os.path.join(self.args.export_folder, 'vkps_random_trace.png')
+                scene.show(screenshot=export_path)
+
+                if mesh4d.output_msg:
+                    print("export image: {}".format(export_path))
+            else:
+                scene.show()
             
     def eval_deformation_intensity(self):
         print('-' * 50)
@@ -129,10 +141,11 @@ class Benchmarker:
 
         _, starts, traces = measure.markerset_trace_length(vkps_breast_full, start_frame=0)
 
+        # deformation intensity plot
         if self.args.plot:
             visual.show_mesh_value_mask(
                 self.breast_ls[1].mesh, starts, traces,
-                is_save=True, export_folder=self.args.export_folder, export_name='breast_disp',
+                is_save=self.args.export, export_folder=self.args.export_folder, export_name='breast_disp',
                 show_edges=True, scalar_bar_args={'title': "tragcctory lenght (mm)"})
 
     def export(self):
@@ -173,7 +186,8 @@ class Bemchmarker_marker_guided(Benchmarker):
         vkps_control = self.o4.assemble_markerset(name='vkps_control')
         self.diff_control = kps.MarkerSet.diff(vkps_control, self.landmarks)
 
-        if self.args.plot:
+        # control landmarks plot
+        if self.args.plot and self.args.export:
             self.o4.animate(self.args.export_folder, filename='vkps_control', kps_names=('vkps_control', 'landmarks'), m_props={'opacity': 0.5})
 
     def eval_noncontrol_landmark(self):
@@ -270,10 +284,10 @@ if __name__ == "__main__":
 
     benchmarker.load_data()
     benchmarker.implement()
-    benchmarker.eval_control_landmark()
-    benchmarker.eval_noncontrol_landmark()
+    # benchmarker.eval_control_landmark()
+    # benchmarker.eval_noncontrol_landmark()
     benchmarker.eval_virtual_landmark()
-    benchmarker.eval_deformation_intensity()
+    # benchmarker.eval_deformation_intensity()
 
-    if args.export:
-        benchmarker.export()
+    # if args.export:
+    #     benchmarker.export()
