@@ -24,7 +24,7 @@ def sys_args_parser() -> argparse.ArgumentParser:
     parser.add_argument("--approach", default="rbf", type=str)
     parser.add_argument("--plot", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--export", default=True, type=bool, action=argparse.BooleanOptionalAction)
-    parser.add_argument("--export-folder", default='../output/12fps/rbf', type=str)
+    parser.add_argument("--export-folder", default='../output/10fps/rbf', type=str)
     parser.add_argument("--mesh-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/mesh/', type=str)
     parser.add_argument("--landmark-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/landmark/landmark.pkl', type=str)
     parser.add_argument("--test-landmark-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/test/random_landmark.pkl', type=str)
@@ -64,10 +64,7 @@ class Benchmarker:
         mesh_ls = [crave.fix_pvmesh_disconnect(mesh) for mesh in mesh_ls]
 
         # load landmarks from paths
-        landmarks_raw = utils.load_pkl_object(self.args.landmark_path)
-        landmarks_raw.interp_field()
-        self.landmarks = landmarks_raw.reslice(self.fps)
-        self.landmarks.interp_field()
+        self.landmarks = utils.load_pkl_object(self.args.landmark_path)
 
         # automatic breast crop
         contour = self.landmarks.extract(('marker 0', 'marker 2', 'marker 3', 'marker 14', 'marker 15', 'marker 17'))
@@ -284,10 +281,10 @@ if __name__ == "__main__":
 
     benchmarker.load_data()
     benchmarker.implement()
-    # benchmarker.eval_control_landmark()
-    # benchmarker.eval_noncontrol_landmark()
+    benchmarker.eval_control_landmark()
+    benchmarker.eval_noncontrol_landmark()
     benchmarker.eval_virtual_landmark()
-    # benchmarker.eval_deformation_intensity()
+    benchmarker.eval_deformation_intensity()
 
-    # if args.export:
-    #     benchmarker.export()
+    if args.export:
+        benchmarker.export()
