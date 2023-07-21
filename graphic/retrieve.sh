@@ -1,3 +1,8 @@
+# retrieve quantitative plots
+mkdir graph
+cp -r ../output/graph/ ./graph
+
+# retrieve qualitative plots
 export digits=%04d
 export frame_size=300
 export file_name=vkps_random
