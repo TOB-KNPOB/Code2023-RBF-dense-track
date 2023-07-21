@@ -16,7 +16,7 @@ output/
 temp/
 
 # binary file
-*.png
+# *.png
 *.jpg
 # *.gif
 *.mp4

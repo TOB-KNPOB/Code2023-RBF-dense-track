@@ -11,12 +11,15 @@ do
         export source=../output/$(echo $fps)fps/$approach
         export destination=./$(echo $fps)fps/$approach
         mkdir $destination
-        cp $source/$file_name.mp4 $destination
+        
+        # retrieve mp4 and convert to compressed gif
+        # cp $source/$file_name.mp4 $destination
+        # magick convert -coalesce $destination/*.mp4 $destination/temp$digits.png
+        # magick mogrify -resize $frame_size $destination/*.png
+        # magick convert -coalesce $destination/*.png $destination/$file_name.gif
+        # rm $destination/*.mp4 $destination/*.png
 
-        magick convert -coalesce $destination/*.mp4 $destination/temp$digits.png
-        magick mogrify -resize $frame_size $destination/*.png
-        magick convert -coalesce $destination/*.png $destination/$file_name.gif
-
-        rm $destination/*.mp4 $destination/*.png
+        # retrieve trace image
+        cp $source/$(echo $file_name)_trace.png $destination
     done
 done
