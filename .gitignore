@@ -12,7 +12,7 @@ data/
 media/
 param/
 build/
-output/
+output*/
 temp/
 
 # binary file

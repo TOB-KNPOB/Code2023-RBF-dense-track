@@ -24,6 +24,7 @@ def sys_args_parser() -> argparse.ArgumentParser:
     parser.add_argument("--approach", default="rbf", type=str)
     parser.add_argument("--plot", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--export", default=True, type=bool, action=argparse.BooleanOptionalAction)
+    parser.add_argument("--keep-plot-win", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--export-folder", default='../output/10fps/rbf', type=str)
     parser.add_argument("--mesh-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/mesh/', type=str)
     parser.add_argument("--landmark-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/landmark/landmark.pkl', type=str)
@@ -108,7 +109,10 @@ class Benchmarker:
 
         # stack plot
         if self.args.plot:
-            self.o4.show(elements='mk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500], zoom_rate=5, skip=round(len(self.breast_ls) / 10), m_props={'opacity': 0.5}, is_save=self.args.export, export_folder=self.args.export_folder, export_name='vkps_random_stack')
+            scene = self.o4.show(elements='pk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500],  zoom_rate=5, skip=round(len(self.breast_ls) / 10), p_props={'color': 'gray'}, is_save=self.args.export, export_folder=self.args.export_folder, export_name='vkps_random_stack')
+
+            if not self.args.keep_plot_win:
+                scene.close()
 
         # trace plot
         if self.args.plot:
@@ -119,12 +123,16 @@ class Benchmarker:
 
             if self.args.export:
                 export_path = os.path.join(self.args.export_folder, 'vkps_random_trace.png')
-                scene.show(screenshot=export_path)
+                scene.show(screenshot=export_path, interactive_update=True)
 
                 if mesh4d.output_msg:
                     print("export image: {}".format(export_path))
+
             else:
-                scene.show()
+                scene.show(interactive_update=True)
+
+            if not self.args.keep_plot_win:
+                scene.close()
             
     def eval_deformation_intensity(self):
         print('-' * 50)
@@ -140,10 +148,13 @@ class Benchmarker:
 
         # deformation intensity plot
         if self.args.plot:
-            visual.show_mesh_value_mask(
+            scene = visual.show_mesh_value_mask(
                 self.breast_ls[1].mesh, starts, traces,
                 is_save=self.args.export, export_folder=self.args.export_folder, export_name='breast_disp',
                 show_edges=True, scalar_bar_args={'title': "tragcctory lenght (mm)"})
+            
+            if not self.args.keep_plot_win:
+                scene.close()
 
     def export(self):
         """export benchmarker obj to disk with evaluated metrics"""
