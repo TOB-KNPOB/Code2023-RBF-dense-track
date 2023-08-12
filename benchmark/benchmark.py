@@ -105,11 +105,11 @@ class Benchmarker:
 
         # animation
         if self.args.plot and self.args.export:
-            self.o4.animate(output_folder=self.args.export_folder, filename='vkps_random', kps_names=('vkps_random',), m_props={'opacity': 0.5})
+            self.o4.animate(output_folder=self.args.export_folder, filename='vkps_random', kps_names=('vkps_random',), m_props={'opacity': 0.5}, k_props={'color': 'royalblue'})
 
         # stack plot
         if self.args.plot:
-            scene = self.o4.show(elements='pk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500],  zoom_rate=5, skip=round(len(self.breast_ls) / 10), p_props={'color': 'gray'}, is_save=self.args.export, export_folder=self.args.export_folder, export_name='vkps_random_stack')
+            scene = self.o4.show(elements='pk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500],  zoom_rate=5, skip=round(len(self.breast_ls) / 10), p_props={'color': 'gray'}, k_props={'color': 'royalblue'}, is_save=self.args.export, export_folder=self.args.export_folder, export_name='vkps_random_stack')
 
             if not self.args.keep_plot_win:
                 scene.close()
@@ -196,7 +196,7 @@ class Bemchmarker_marker_guided(Benchmarker):
 
         # control landmarks plot
         if self.args.plot and self.args.export:
-            self.o4.animate(self.args.export_folder, filename='vkps_control', kps_names=('vkps_control', 'landmarks'), m_props={'opacity': 0.5})
+            self.o4.animate(self.args.export_folder, filename='vkps_control', kps_names=('landmarks', 'vkps_control'), m_props={'opacity': 0.5})
 
     def eval_noncontrol_landmark(self):
         super().eval_noncontrol_landmark()
@@ -293,9 +293,9 @@ if __name__ == "__main__":
     benchmarker.load_data()
     benchmarker.implement()
     benchmarker.eval_control_landmark()
-    benchmarker.eval_noncontrol_landmark()
+    # benchmarker.eval_noncontrol_landmark()
     benchmarker.eval_virtual_landmark()
     benchmarker.eval_deformation_intensity()
 
-    if args.export:
-        benchmarker.export()
+    # if args.export:
+    #     benchmarker.export()
