@@ -2,7 +2,7 @@
 
 ## Graphical abstract
 
-![img](https://github.com/TOB-KNPOB/code2023-rbf-dense-track/blob/main/graphic/workflow.png?raw=true)
+![img](https://github.com/TOB-KNPOB/code2023-rbf-dense-track/blob/main/graphic/workflow/workflow.jpg?raw=true)
 
 ## `DynaBreastLite` dataset
 
