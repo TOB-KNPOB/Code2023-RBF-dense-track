@@ -10,25 +10,26 @@ sys.path.insert(0, parent_dir)
 
 import time
 import argparse
+import numpy as np
 import pyvista as pv
 import mesh4d
 from mesh4d import kps, obj3d, utils
 from mesh4d.analyse import crave, visual, measure
 
-from regist import reg_rbf, reg_ecpd, reg_cpd, reg_bcpd
+from regist import reg_ecpd, reg_cpd, reg_bcpd, reg_udmc
 
 def sys_args_parser() -> argparse.ArgumentParser:
     """parse system arguments"""
     parser = argparse.ArgumentParser(description='Benchmarking 4D dense tracking performance')
 
-    parser.add_argument("--approach", default="rbf", type=str)
+    parser.add_argument("--approach", default="udmc", type=str)
     parser.add_argument("--plot", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--export", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--keep-plot-win", default=True, type=bool, action=argparse.BooleanOptionalAction)
-    parser.add_argument("--export-folder", default='../output/10fps/rbf', type=str)
-    parser.add_argument("--mesh-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/mesh/', type=str)
-    parser.add_argument("--landmark-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/landmark/landmark.pkl', type=str)
-    parser.add_argument("--test-landmark-path", default='/Users/knpob/Territory/2-Kolmo/4-Dataset/20230715-DynaBreastLite/test/random_landmark.pkl', type=str)
+    parser.add_argument("--export-folder", default='../output/10fps/udmc', type=str)
+    parser.add_argument("--mesh-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/mesh', type=str)
+    parser.add_argument("--landmark-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/landmark/', type=str)
+    parser.add_argument("--test-landmark-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/test', type=str)
     parser.add_argument("--start", default=0, type=int)
     parser.add_argument("--end", default=120, type=int)
     parser.add_argument("--stride", default=12, type=int)
@@ -55,20 +56,27 @@ class Benchmarker:
         print('-' * 50)
         print('data loading')
 
-        # load mesh from paths
-        mesh_ls, texture_ls = obj3d.load_mesh_series(
+        # load mesh from path
+        mesh_ls, _ = obj3d.load_mesh_series(
             folder = self.args.mesh_path,
             start = self.args.start,
             stride = self.args.stride,
             end = self.args.end,
+            load_texture=False
         )
         mesh_ls = [crave.fix_pvmesh_disconnect(mesh) for mesh in mesh_ls]
 
-        # load landmarks from paths
-        self.landmarks = utils.load_pkl_object(self.args.landmark_path)
+        # load landmarks from path
+        vicon_arr = np.load(os.path.join(self.args.landmark_path, 'vicon_arr.npy'))
+        vicon_start = utils.load_pkl_object(os.path.join(self.args.landmark_path, 'vicon_start.pkl'))
+        vicon_cab = utils.load_pkl_object(os.path.join(self.args.landmark_path, 'vicon>>3dmd.pkl'))
+
+        self.landmarks = kps.MarkerSet()
+        self.landmarks.load_from_array(vicon_arr, start_time=vicon_start, fps=100, trans_cab=vicon_cab)
+        self.landmarks.interp_field()
 
         # automatic breast crop
-        contour = self.landmarks.extract(('marker 0', 'marker 2', 'marker 3', 'marker 14', 'marker 15', 'marker 17'))
+        contour = self.landmarks.extract((0, 1, 10, 17, 25, 26))
         mesh_clip_ls = crave.clip_with_contour(mesh_ls, start_time=0, fps=self.fps, contour=contour, clip_bound='xy', margin=30)
 
         # create obj3d object lists for cropped breast
@@ -96,7 +104,9 @@ class Benchmarker:
         print('-' * 50)
         print('evaluate virtual landmarks tracking performance')
 
-        random_landmarks = utils.load_pkl_object(self.args.test_landmark_path)
+        points_random = np.load(os.path.join(self.args.test_landmark_path, 'points_test.npy'))
+        random_landmarks = kps.MarkerSet()
+        random_landmarks.load_from_array(np.expand_dims(points_random, axis=0))
         random_kps = random_landmarks.get_frame_coord(0)
 
         self.o4.vkps_track(random_kps, start_id=0, name='vkps_random')
@@ -280,7 +290,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     approach_dict = {
-        'rbf': {'benchmarker': Bemchmarker_marker_guided, 'obj4d_class': reg_rbf.Obj4d_RBF, 'regist_props': {}},
+        'udmc': {'benchmarker': Bemchmarker_marker_guided, 'obj4d_class': reg_udmc.Obj4d_UdMC, 'regist_props': {}},
         'ecpd': {'benchmarker': Bemchmarker_marker_guided, 'obj4d_class': reg_ecpd.Obj4d_ECPD, 'regist_props': {}},
         'cpd': {'benchmarker': Bemchmarker_marker_less, 'obj4d_class': reg_cpd.Obj4d_CPD, 'regist_props': {}},
         'bcpd': {'benchmarker': Bemchmarker_marker_less, 'obj4d_class': reg_bcpd.Obj4d_BCPD, 'regist_props': {}},
