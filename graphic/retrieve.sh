@@ -1,6 +1,6 @@
 # retrieve quantitative plots
 mkdir graph
-cp -r ../output/graph/ ./graph
+cp -r ../benchmark/output/graph/ ./graph
 
 # retrieve qualitative plots
 export digits=%04d
@@ -13,7 +13,7 @@ do
 
     for approach in rbf ecpd cpd bcpd
     do
-        export source=../output/$(echo $fps)fps/$approach
+        export source=../benchmark/output/$(echo $fps)fps/$approach
         export destination=./$(echo $fps)fps/$approach
         mkdir $destination
         

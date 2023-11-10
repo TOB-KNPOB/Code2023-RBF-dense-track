@@ -1,12 +1,15 @@
 # include .. to the system path
+import os
 import sys
-import os.path
 from inspect import getsourcefile
 
 current_path = os.path.abspath(getsourcefile(lambda:0))
 current_dir = os.path.dirname(current_path)
 parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
 sys.path.insert(0, parent_dir)
+
+os.environ['DISPLAY'] = ':99.0'
+os.environ['PYVISTA_OFF_SCREEM'] = 'true'
 
 import time
 import argparse
@@ -26,7 +29,7 @@ def sys_args_parser() -> argparse.ArgumentParser:
     parser.add_argument("--plot", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--export", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--keep-plot-win", default=True, type=bool, action=argparse.BooleanOptionalAction)
-    parser.add_argument("--export-folder", default='../output/10fps/udmc', type=str)
+    parser.add_argument("--export-folder", default='output/10fps/udmc', type=str)
     parser.add_argument("--mesh-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/mesh', type=str)
     parser.add_argument("--landmark-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/landmark/', type=str)
     parser.add_argument("--test-landmark-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/test', type=str)
@@ -110,12 +113,10 @@ class Benchmarker:
         random_kps = random_landmarks.get_frame_coord(0)
 
         self.o4.vkps_track(random_kps, start_id=0, name='vkps_random')
-        vkps_random = self.o4.assemble_markerset(name='vkps_random')
-        vkps_random.interp_field()
-
+        
         # animation
         if self.args.plot and self.args.export:
-            self.o4.animate(output_folder=self.args.export_folder, filename='vkps_random', kps_names=('vkps_random',), m_props={'opacity': 0.5}, k_props={'color': 'royalblue'})
+            self.o4.animate(self.args.export_folder, filename='vkps_random', kps_names=('vkps_random',), m_props={'opacity': 0.5}, k_props={'color': 'royalblue'})
 
         # stack plot
         if self.args.plot:
@@ -127,6 +128,8 @@ class Benchmarker:
         # trace plot
         if self.args.plot:
             scene = pv.Plotter()
+            vkps_random = self.o4.assemble_markerset(name='vkps_random')
+            vkps_random.interp_field()
             vkps_random.add_to_scene(scene)
             self.breast_ls[0].add_mesh_to_scene(scene, opacity=0.1)
             scene.camera_position = 'xy'
@@ -302,10 +305,10 @@ if __name__ == "__main__":
 
     benchmarker.load_data()
     benchmarker.implement()
-    benchmarker.eval_control_landmark()
-    # benchmarker.eval_noncontrol_landmark()
     benchmarker.eval_virtual_landmark()
+    benchmarker.eval_control_landmark()
+    benchmarker.eval_noncontrol_landmark()
     benchmarker.eval_deformation_intensity()
 
-    # if args.export:
-    #     benchmarker.export()
+    if args.export:
+        benchmarker.export()
