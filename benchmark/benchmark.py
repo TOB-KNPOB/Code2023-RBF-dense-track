@@ -8,6 +8,8 @@ current_dir = os.path.dirname(current_path)
 parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
 sys.path.insert(0, parent_dir)
 
+# on linux without gui
+# $ Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 os.environ['DISPLAY'] = ':99.0'
 os.environ['PYVISTA_OFF_SCREEM'] = 'true'
 
@@ -28,7 +30,7 @@ def sys_args_parser() -> argparse.ArgumentParser:
     parser.add_argument("--approach", default="udmc", type=str)
     parser.add_argument("--plot", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--export", default=True, type=bool, action=argparse.BooleanOptionalAction)
-    parser.add_argument("--keep-plot-win", default=True, type=bool, action=argparse.BooleanOptionalAction)
+    parser.add_argument("--off-screen", default=True, type=bool, action=argparse.BooleanOptionalAction)
     parser.add_argument("--export-folder", default='output/10fps/udmc', type=str)
     parser.add_argument("--mesh-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/mesh', type=str)
     parser.add_argument("--landmark-path", default='/mnt/d/knpob/4-data/20231110-DynaBreastLite/landmark/', type=str)
@@ -120,14 +122,11 @@ class Benchmarker:
 
         # stack plot
         if self.args.plot:
-            scene = self.o4.show(elements='pk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500],  zoom_rate=5, skip=round(len(self.breast_ls) / 10), p_props={'color': 'gray'}, k_props={'color': 'royalblue'}, is_save=self.args.export, export_folder=self.args.export_folder, export_name='vkps_random_stack')
-
-            if not self.args.keep_plot_win:
-                scene.close()
+            scene = self.o4.show(off_screen=self.args.off_screen, elements='pk', stack_dist=500, kps_names=('vkps_random',), window_size=[2000, 500],  zoom_rate=5, skip=round(len(self.breast_ls) / 10), p_props={'color': 'gray'}, k_props={'color': 'royalblue'}, is_export=self.args.export, export_folder=self.args.export_folder, export_name='vkps_random_stack')
 
         # trace plot
         if self.args.plot:
-            scene = pv.Plotter()
+            scene = pv.Plotter(off_screen=self.args.off_screen)
             vkps_random = self.o4.assemble_markerset(name='vkps_random')
             vkps_random.interp_field()
             vkps_random.add_to_scene(scene)
@@ -143,9 +142,6 @@ class Benchmarker:
 
             else:
                 scene.show(interactive_update=True)
-
-            if not self.args.keep_plot_win:
-                scene.close()
             
     def eval_deformation_intensity(self):
         print('-' * 50)
@@ -163,11 +159,11 @@ class Benchmarker:
         if self.args.plot:
             scene = visual.show_mesh_value_mask(
                 self.breast_ls[1].mesh, starts, traces,
-                is_save=self.args.export, export_folder=self.args.export_folder, export_name='breast_disp',
+                is_export=self.args.export, export_folder=self.args.export_folder, export_name='breast_disp',
                 show_edges=True, scalar_bar_args={'title': "tragcctory lenght (mm)"})
             
-            if not self.args.keep_plot_win:
-                scene.close()
+            # if not self.args.keep_plot_win:
+            #     scene.close()
 
     def export(self):
         """export benchmarker obj to disk with evaluated metrics"""
@@ -300,15 +296,15 @@ if __name__ == "__main__":
     }
 
     meta= approach_dict[args.approach]
-    benchmarker_class = meta['benchmarker']
-    benchmarker = benchmarker_class(args, meta)
+    bm_class = meta['benchmarker']
+    bm = bm_class(args, meta)
 
-    benchmarker.load_data()
-    benchmarker.implement()
-    benchmarker.eval_virtual_landmark()
-    benchmarker.eval_control_landmark()
-    benchmarker.eval_noncontrol_landmark()
-    benchmarker.eval_deformation_intensity()
+    bm.load_data()
+    bm.implement()
+    bm.eval_virtual_landmark()
+    bm.eval_control_landmark()
+    bm.eval_noncontrol_landmark()
+    bm.eval_deformation_intensity()
 
     if args.export:
-        benchmarker.export()
+        bm.export()
