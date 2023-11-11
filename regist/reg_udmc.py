@@ -10,7 +10,7 @@ import mesh4d.config.param
 from mesh4d import obj3d, obj4d, field, utils
 from mesh4d.analyse import measure
 
-class Trans_Nonrigid_RBF(field.Trans_Nonrigid):
+class Trans_Nonrigid_UdMC(field.Trans_Nonrigid):
     def regist(self, landmark_name: str, field_nbr: int = 100, **kwargs):
         landmarks_source = self.source.kps_group[landmark_name].get_points_coord()
         landmarks_target = self.target.kps_group[landmark_name].get_points_coord()
@@ -25,7 +25,7 @@ class Trans_Nonrigid_RBF(field.Trans_Nonrigid):
         self.field = RBFInterpolator(self.source_points, self.deform_points, neighbors=field_nbr)
 
 
-class Obj4d_RBF(obj4d.Obj4d_Deform):
+class Obj4d_UdMC(obj4d.Obj4d_Deform):
     def regist(self, landmark_name: str, **kwargs):
         """Implement registration among 3D objects in :attr:`self.obj_ls`.
 
@@ -59,7 +59,7 @@ class Obj4d_RBF(obj4d.Obj4d_Deform):
             
 
     def process_nonrigid_dynamic(self, idx_source: int, idx_target: int, landmark_name: str, **kwargs):
-        trans = Trans_Nonrigid_RBF(
+        trans = Trans_Nonrigid_UdMC(
             source_obj=self.obj_ls[idx_source],
             target_obj=self.obj_ls[idx_target],
         )
