@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- meta tags for social media banners, these should be filled in appropriately as they are your "business card" -->
+    <!-- replace the content tag with appropriate information -->
+    <meta name="description" content="">
+    <meta property="og:title" content="Ultra-dense Motion Capture: An exploratory full-automatic approach for dense tracking of breast motion in 4D"/>
+    <meta property="og:description" content=""/>
+    <meta property="og:url" content="https://tob-knpob.github.io/udmc"/>
+    <!-- path to banner image, should be in the path listed below. Optimal dimensions are 1200x630 -->
+    <meta property="og:image" content="static/graphic/workflow/workflow.png" />
+    <meta property="og:image:width" content="1280"/>
+    <meta property="og:image:height" content="1280"/>
+    <meta name="twitter:title" content="Ultra-dense Motion Capture: An exploratory full-automatic approach for dense tracking of breast motion in 4D">
+    <meta name="twitter:description" content="">
+    <!-- path to banner image, should be in the path listed below. Optimal dimensions are 1200x600 -->
+    <meta name="twitter:image" content="static/graphic/workflow/workflow.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- keywords for your paper to be indexed by-->
+    <meta name="keywords" content="Breast biomechanics; 4D scanning; motion capture; dense correspondence; thin-plate spline (TPS); deformation intensity analysis;">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- title -->
+    <title>Ultra-dense Motion Capture: An exploratory full-automatic approach for dense tracking of breast motion in 4D</title>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+    rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="static/css/index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script defer src="static/js/fontawesome.all.min.js"></script>
+    <script src="static/js/bulma-carousel.min.js"></script>
+    <script src="static/js/bulma-slider.min.js"></script>
+    <script src="static/js/index.js"></script>
+  </head>
+
+  <body>
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <!-- title -->
+              <h1 class="title publication-title is-2">Ultra-dense Motion Capture: An exploratory full-automatic approach for dense tracking of breast motion in 4D</h1>
+              <!-- authors -->
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">
+                  <a href="https://qilong-liu.vercel.app" target="_blank">Qi-long Liu</a><sup>1, 2</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Kit-lun Yick</a><sup>1, 2, *</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="https://orcid.org/0000-0002-9405-6288" target="_blank">Yue Sun</a><sup>3</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="https://research.polyu.edu.hk/en/persons/kit-lun-yick" target="_blank">Joanne Yip</a><sup>1</sup>
+                </span>
+              </div>
+              <!-- institutes -->
+              <div>
+                <span class="author-block">
+                  <sup>1</sup> School of Fashion and Textiles, The Hong Kong Polytechnic University<br>
+                  <sup>2</sup> Laboratory for Artificial Intelligence in Design<br>
+                  <sup>3</sup> School of Fashion Design & Engineering, Zhejiang Sci-Tech University
+                </span>
+              </div>
+              <!-- journal/conference -->
+              <!-- <h1 class="title is-4"><br>Journal/Conference, Year</h1> -->
+              <!-- contact/remark -->
+              <div>
+                <span class="eql-cntrb"><small><sup>*</sup>Corresponding author. E-mail: <a>kit-lun.yick@polyu.edu.hk</a></small></span>
+              </div>
+              
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <!-- paper link -->
+                  <span class="link-block">
+                    <a href="" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Paper (Under Review)</span>
+                    </a>
+                  </span>
+                  <!-- ArXiv abstract link -->
+                  <!--
+                  <span class="link-block">
+                    <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="ai ai-arxiv"></i>
+                      </span>
+                      <span>arXiv</span>
+                    </a>
+                  </span>
+                  -->
+                  <!-- github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/TOB-KNPOB/udmc" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fab fa-github"></i>
+                      </span>
+                      <span>Code</span>
+                    </a>
+                  </span>
+                  <!-- data link -->
+                  <span class="link-block">
+                    <a href="DATA LINK" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-database"></i>
+                      </span>
+                      <span>Data (Coming)</span>
+                    </a>
+                  </span>
+                  <!-- supplementary material link -->
+                  <!--
+                  <span class="link-block">
+                    <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Supplementary</span>
+                    </a>
+                  </span>
+                  -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- paper abstract -->
+    <section class="section hero is-light">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Under review.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end paper abstract -->
+
+    <!-- method overview image-->
+    <section class="section"></section>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <img src="./static/graphic/workflow/workflow.png" alt="workflow">
+        </div>
+      </div>
+    </div>
+
+    <!-- result columns -->
+    <section class="section">
+      <div class="container is-max-desktop content">
+        <h2 class="title is-3">Virtual landmarks tracking</h2>
+        <p>Tracking arbitrary landmarks' trajectories. Noted that the selection of virtual landmarks are merely for visual clarity. Under the hood, every point on the breast surface can be densely tracked by the proposed approach.</p>
+        <h4><center>DBL-10 (10 fps)</center></h4>
+        <div class="row-4">
+          <div class="column">
+            <center>Ours</center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/10fps/udmc/vkps_random.mp4"
+              type="video/mp4"">
+            </video>
+            <img src="./static/graphic/10fps/udmc/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>ECPD <a href="#footnote-1">[1]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/10fps/ecpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/10fps/ecpd/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>CPD <a href="#footnote-2">[2]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/10fps/cpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/10fps/cpd/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>BCPD <a href="#footnote-3">[3]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/10fps/bcpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/10fps/bcpd/vkps_random_trace.png" alt="result">
+          </div>
+        </div>
+
+        <h4><center>DBL-60 (60 fps)</center></h4>
+        <div class="row-4">
+          <div class="column">
+            <center>Ours</center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/60fps/udmc/vkps_random.mp4"
+              type="video/mp4"">
+            </video>
+            <img src="./static/graphic/60fps/udmc/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>ECPD <a href="#footnote-1">[1]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/60fps/ecpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/60fps/ecpd/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>CPD <a href="#footnote-2">[2]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/60fps/cpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/60fps/cpd/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>BCPD <a href="#footnote-3">[3]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/60fps/bcpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/60fps/bcpd/vkps_random_trace.png" alt="result">
+          </div>
+        </div>
+
+        <h4><center>DBL-120 (120 fps)</center></h4>
+        <div class="row-4">
+          <div class="column">
+            <center>Ours</center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/120fps/udmc/vkps_random.mp4"
+              type="video/mp4"">
+            </video>
+            <img src="./static/graphic/120fps/udmc/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>ECPD <a href="#footnote-1">[1]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/120fps/ecpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/120fps/ecpd/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>CPD <a href="#footnote-2">[2]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/120fps/cpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/120fps/cpd/vkps_random_trace.png" alt="result">
+          </div>
+          <div class="column">
+            <center>BCPD <a href="#footnote-3">[3]</a></center>
+            <video poster="" id="tree" autoplay controls muted loop height="100%">
+              <source src="static/graphic/120fps/bcpd/vkps_random.mp4"
+              type="video/mp4">
+            </video>
+            <img src="./static/graphic/120fps/bcpd/vkps_random_trace.png" alt="result">
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end columns -->
+
+    <!-- quantitative results -->
+    <section class="section">
+      <div class="container is-max-desktop content">
+        <h2 class="title">Quantitative metrics</h2>
+        <h3>Computation time</h3>
+        <img src="./static/graphic/graph/compute_time.png" alt="result" style="width:50%">
+        
+        <h3>Alignment on control landmarks</h3>
+        <div class="row-2">
+          <div class="column">
+            <img src="./static/graphic/graph/align_control.png" alt="result">
+          </div>
+          <div class="column">
+            <img src="./static/graphic/graph/align_control_time.png" alt="result">
+          </div>
+        </div>
+        <em>P.S. CPD & BCPD are excluded from comparison because they don't utilize control landmarks information.</em>
+
+        <h3>Alignment on arbitrary landmarks</h3>
+        <div class="row-2">
+          <div class="column">
+            <img src="./static/graphic/graph/align_noncontrol.png" alt="result">
+          </div>
+          <div class="column">
+            <img src="./static/graphic/graph/align_noncontrol_time.png" alt="result">
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end BibTex citation -->
+
+    <!-- BibTex citation -->
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>N/A</code></pre>
+      </div>
+    </section>
+    <!-- end BibTex citation -->
+
+    <footer class="footer">
+      <div class="container">
+        <!-- footnote/references -->
+        <center><u>Footnote / References</u></center>
+        <div class="container is-max-desktop content">
+          <ol>
+            <li id="footnote-1">Golyanik, Vladislav, et al. "Extended coherent point drift algorithm with correspondence priors and optimal subsampling." 2016 IEEE winter conference on applications of computer vision (WACV). IEEE, 2016.</li>
+            <li id="footnote-2">Myronenko, Andriy, and Xubo Song. "Point set registration: Coherent point drift." IEEE transactions on pattern analysis and machine intelligence 32.12 (2010): 2262-2275.</li>
+            <li id="footnote-3">Hirose, Osamu. "A Bayesian formulation of coherent point drift." IEEE transactions on pattern analysis and machine intelligence 43.7 (2020): 2269-2286.</li>
+          </ol>
+        </div>
+
+        <!-- disclaimer -->
+        <div class="columns is-centered">
+          <div class="column is-10">
+            <div class="content">
+              <center><u>Disclaimers</u></center><br>
+              <p>
+                This page was built using the <a href="https://github.com/TOB-KNPOB/paper-page-template/tree/main" target="_blank">paper-page-template</a> which was adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>. You are free to borrow the of this website, we just ask that you link back to this page in the footer. This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+              </p>
+            </div>
+          </div>
+      </div>
+    </footer>
+
+    <!-- statcounter tracking code -->
+    <!-- you can add a tracker to track page visits by creating an account at statcounter.com -->
+    <!-- end of statounter code -->
+  </body>
+</html>
+
+<style>
+  /* three image containers (use 25% for four, and 50% for two, etc) */
+  .row-1 .column {
+    float: left;
+    width: 99%;
+    padding: 5px;
+  }
+  .row-2 .column {
+    float: left;
+    width: 49%;
+    padding: 5px;
+  }
+  .row-3 .column {
+    float: left;
+    width: 33%;
+    padding: 5px;
+  }
+  .row-4 .column {
+    float: left;
+    width: 25%;
+    padding: 5px;
+  }
+  .row-5 .column {
+    float: left;
+    width: 20%;
+    padding: 5px;
+  }
+  .row-6 .column {
+    float: left;
+    width: 16.6%;
+    padding: 5px;
+  }
+</style>
