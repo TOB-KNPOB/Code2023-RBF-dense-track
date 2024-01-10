@@ -20,7 +20,7 @@ do
         # $ sudo apt update
         # $ sudo apt install ffmpeg
         cp $source/vkps_random.mp4 $destination/original.mp4
-        ffmpeg -i $destination/original.mp4 -vf scale="iw*$scale:ih*$scale" -y $destination/vkps_random.mp4
+        ffmpeg -i $destination/original.mp4 -vf scale="iw*$scale:ih*$scale" $destination/vkps_random.mp4
         rm $destination/original.mp4
 
         # retrieve trace image
