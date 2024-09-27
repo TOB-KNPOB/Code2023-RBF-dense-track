@@ -20,7 +20,7 @@ Clone this repository:
 ```
 cd ..
 git clone https://github.com/liu-qilong/udmc
-cd foot-measure
+cd udmc
 conda activate mesh4d
 ```
 
