@@ -19,7 +19,7 @@ Clone this repository:
 
 ```
 cd ..
-git clone https://github.com/liu-qilong/foot-measure
+git clone https://github.com/liu-qilong/udmc
 cd foot-measure
 conda activate mesh4d
 ```
