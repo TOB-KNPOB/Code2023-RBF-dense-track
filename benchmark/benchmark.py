@@ -10,7 +10,7 @@ sys.path.insert(0, parent_dir)
 
 # on linux without gui
 # $ Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-os.environ['DISPLAY'] = ':99.0'
+# os.environ['DISPLAY'] = ':99.0'
 os.environ['PYVISTA_OFF_SCREEM'] = 'true'
 
 import time
@@ -74,7 +74,7 @@ class Benchmarker:
         # load landmarks from path
         vicon_arr = np.load(os.path.join(self.args.landmark_path, 'vicon_arr.npy'))
         vicon_start = utils.load_pkl_object(os.path.join(self.args.landmark_path, 'vicon_start.pkl'))
-        vicon_cab = utils.load_pkl_object(os.path.join(self.args.landmark_path, 'vicon>>3dmd.pkl'))
+        vicon_cab = utils.load_pkl_object(os.path.join(self.args.landmark_path, 'vicon_to_3dmd.pkl'))
 
         self.landmarks = kps.MarkerSet()
         self.landmarks.load_from_array(vicon_arr, start_time=vicon_start, fps=100, trans_cab=vicon_cab)
@@ -82,7 +82,7 @@ class Benchmarker:
 
         # automatic breast crop
         contour = self.landmarks.extract((0, 1, 10, 17, 25, 26))
-        mesh_clip_ls = crave.clip_with_contour(mesh_ls, start_time=0, fps=self.fps, contour=contour, clip_bound='xy', margin=30)
+        mesh_clip_ls = crave.clip_meshes_with_contour(mesh_ls, start_time=0, fps=self.fps, contour=contour, clip_bound='xy', margin=30)
 
         # create obj3d object lists for cropped breast
         self.breast_ls = obj3d.init_obj_series(
