@@ -1,5 +1,7 @@
 # Ultra-dense Motion Capture: An exploratory full-automatic approach for dense tracking of breast motion in 4D
 
+![img](https://github.com/liu-qilong/udmc/blob/main/static/graphic/workflow/workflow.jpg?raw=true)
+
 For demo videos, please visit our [paper page](https://liu-qilong.github.io/udmc/).
 
 ## Setup
