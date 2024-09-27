@@ -31,7 +31,7 @@ conda activate mesh4d
 [mesh4d](https://github.com/liu-qilong/mesh4d) package is under active development and breaking changes may be introduced. If you encounter any issues, please try to roll-back to a compatible version of `mesh4d` by running this command under the `mesh4d/` folder:
 
 ```
-git reset --hard c3ee229da0660c1f32dd005a11ea93c6a704e231
+git reset --hard 0f808a7d775d4b07564939a442ec477a39283d75
 ```
 
 ## Run
